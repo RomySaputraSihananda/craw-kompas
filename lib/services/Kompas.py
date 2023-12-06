@@ -31,13 +31,14 @@ class Kompas:
         res: Response = self.__request.get(url);
 
         parser: PyQuery = self.__parser.execute(res.text, 'body');
-
-        print(re.search(r'/(\d{4}/\d{2}/\d{2}/\d+)/', url).group(1).replace("/", ""))
+        
 
         return { 
             'title':  parser('.read__title').text(),
             'url_thumbnail': parser('.photo__wrap img').attr('src'),
-            # 'create_at': parser('.read__time')
+            'create_at': self.__datetime.execute(re.search(r'/(\d{4}/\d{2}/\d{2}/\d+)/', url).group(1).replace("/", "")),
+            'tags': [self.__parser.execute(li, 'a').text() for li in parser('.tag__article__item .tag__article__link')]
+
             };
     
 
@@ -67,6 +68,6 @@ class Kompas:
 
 if(__name__ == '__main__'):
     kompas: Kompas = Kompas();
-    with open('data_test.json', 'w') as file:
+    with open('data/data_test.json', 'w') as file:
         file.write(dumps(kompas.execute('news', 1)))
     # print(dumps(kompas.execute('news', 1)));
