@@ -1,6 +1,6 @@
 from requests import Session, Response;
 from pyquery import PyQuery;
-from ..helpers import Parser, Datetime;
+from ..helpers import Parser, Datetime, Hasher;
 
 from json import dumps;
 import re;
@@ -10,6 +10,7 @@ class Kompas:
         self.__request: Session = Session();
         self.__parser: Parser = Parser();
         self.__datetime: Datetime = Datetime();
+        self.__hasher: Hasher = Hasher();
     
         self.__result: dict = {}
         self.__result['title']: str = None;
@@ -31,18 +32,22 @@ class Kompas:
         res: Response = self.__request.get(url);
 
         parser: PyQuery = self.__parser.execute(res.text, 'body');
-        
+        title = parser('.read__title').text();
+
+        article = parser('div[class="col-bs9-7"] div[class="clearfix"]').remove('strong').remove('i').remove('iframe').text().lstrip('- ').replace('\u201c', '').replace('\u201d', '').replace('\n', '');
 
         return { 
-            'title':  parser('.read__title').text(),
+            'id': self.__hasher.execute(title),
+            'title':  title,
+            'url': url,
             'url_thumbnail': parser('.photo__wrap img').attr('src'),
             'create_at': self.__datetime.execute(re.search(r'/(\d{4}/\d{2}/\d{2}/\d+)/', url).group(1).replace("/", "")),
+            'autor': parser('.credit-title-name h6:first-child').text().rstrip(","),
+            'editor': parser('.credit-title-name h6:last-child').text(),
+            'desc': article[:100] + '....',
+            'article': article,
             'tags': [self.__parser.execute(li, 'a').text() for li in parser('.tag__article__item .tag__article__link')]
-
             };
-    
-
-
 
     def execute(self, site: str, page: int, date: str = None) -> str:
         url: str = f'https://indeks.kompas.com/?site={site}&date={date if date else self.__datetime.now().split("T")[0]}&page={page}';
@@ -59,9 +64,11 @@ class Kompas:
         urls: list[str] = self.__get_urls(parser('.latest--indeks.mt2.clearfix'));
 
         for url in urls:
-            data: dict = self.__get_data_page(url)
+            data: dict = self.__get_data_page(url);
 
-            self.__result['data'].append(data)
+            self.__result['data'].append(data);
+
+            # break;
 
         return self.__result;
 
