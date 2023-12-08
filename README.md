@@ -29,16 +29,17 @@ pip install -r requirements.txt
 ## Example Usages
 
 ```sh
-python main.py --site=News --page=2 --output=data
+python main.py --site=News --page=2 --date=2023-12-08 --output=data
 ```
 
 ### Flags
 
-| Flag     | Alias |             Description             | Examplw       |
-| :------- | :---: | :---------------------------------: | :------------ |
-| --site   |  -s   | [category](Category.md) of the site | --site=News   |
-| --page   |  -p   |       number page of the site       | --page=2      |
-| --output |  -o   |        json file output path        | --output=data |
+| Flag     | Alias |             Description             | Example           | Default |
+| :------- | :---: | :---------------------------------: | :---------------- | :-----: |
+| --site   |  -s   | [category](Category.md) of the site | --site=News       |  News   |
+| --page   |  -p   |       number page of the site       | --page=2          |    1    |
+| --date   |  -d   |          date of the site           | --date=2023-12-08 |   now   |
+| --output |  -o   |        json file output path        | --output=data     |  data   |
 
 ## Sample Data
 
