@@ -15,6 +15,9 @@ class Kompas:
         self.__result['title']: str = None;
         self.__result['url']: str = None;
         self.__result['date_now']: str = None;
+        self.__result['site']: str = None;
+        self.__result['date']: str = None;
+        self.__result['page']: int = None;
         self.__result['prev_page']: str = None;
         self.__result['next_page']: str = None;
         self.__result['data']: list[dict] = [];
@@ -68,6 +71,9 @@ class Kompas:
         self.__result['title']: str = parser('title').text();
         self.__result['url']: str = url;
         self.__result['date_now']: str = self.__datetime.now();
+        self.__result['site']: str = site.value;
+        self.__result['date']: str = date if date else self.__datetime.now().split("T")[0]
+        self.__result['page']: int = page
         self.__result['prev_page']: str = self.__str_2_int(parser('.paging__link.paging__link--prev').attr('data-ci-pagination-page'));
         self.__result['next_page']: str = self.__str_2_int(parser('.paging__link.paging__link--next').attr('data-ci-pagination-page'));
 
