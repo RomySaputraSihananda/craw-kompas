@@ -1,0 +1,1 @@
+from .Kompas import Kompas

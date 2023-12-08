@@ -1,7 +1,6 @@
 from requests import Session, Response;
 from pyquery import PyQuery;
-from ..helpers import Parser, Datetime, Hasher, logging;
-
+from lib.helpers import Parser, Datetime, Hasher, logging;
 from json import dumps;
 import re;
 
@@ -34,7 +33,7 @@ class Kompas:
         parser: PyQuery = self.__parser.execute(res.text, 'html');
         title = parser('.read__title').text();
 
-        article = parser('div[class="col-bs9-7"] div[class="clearfix"]').remove('strong').remove('i').remove('iframe').text().lstrip('- ').replace('\u201c', '').replace('\u201d', '').replace('\n', '');
+        article = parser('div[class="col-bs9-7"] div[class="clearfix"]').remove('strong').remove('i').remove('iframe').text().lstrip('- ').replace('\n', '')
 
         return { 
             'id': self.__hasher.execute(title),
@@ -57,8 +56,8 @@ class Kompas:
         except:
             return None;
 
-    def execute(self, site: str, page: int, date: str = None) -> str:
-        url: str = f'https://indeks.kompas.com/?site={site}&date={date if date else self.__datetime.now().split("T")[0]}&page={page}';
+    def execute(self, site: any, page: int, date: str = None) -> str:
+        url: str = f'https://indeks.kompas.com/?site={site.value}&date={date if date else self.__datetime.now().split("T")[0]}&page={page}';
         res: Response = self.__request.get(url);
 
         parser: PyQuery = self.__parser.execute(res.text, 'html');
@@ -85,7 +84,7 @@ class Kompas:
 
         return self.__result;
 
-
+# testing
 if(__name__ == '__main__'):
     kompas: Kompas = Kompas();
     with open('data/data_test.json', 'w') as file:

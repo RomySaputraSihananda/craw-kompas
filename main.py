@@ -1,5 +1,9 @@
-# from helpers import Parser;
+from lib import Kompas
+from lib.helpers import Site
+from json import dumps
 
-# https://indeks.kompas.com/?site=news&date=2023-11-30&page=1
 
-# print(pq(request.Session().get('http://www.kompas.com/global/read/2023/08/02/095400370/wali-kota-di-meksiko-dikecam-karena-hadirkan-penari-striptis-dalam').text)('title').text());
+kompas: Kompas = Kompas()
+
+with open('data/bola.json', 'w') as file:
+    file.write(dumps(kompas.execute(site=Site.Global, page=1, date='2020-10-11')))
