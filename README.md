@@ -41,7 +41,7 @@ python main.py --site=News --page=2 --date=2023-12-08 --output=data
 | --date   |  -d   |          date of the site           | --date=2023-12-08 |   now   |
 | --output |  -o   |        json file output path        | --output=data     |  data   |
 
-## Sample Data
+## Sample Output
 
 ```json
 {
